@@ -85,9 +85,9 @@ func funcSelector(msg string) string {
 		funcMap["历史龙王"]++
 	}
 
-	var res = "今日龙王"
-	if funcMap["历史龙王"] > funcMap["今日龙王"] {
-		res = "历史龙王"
+	var res string
+	for i,v:=range funcMap{
+		if v>1{res=i}
 	}
 	return res
 }
