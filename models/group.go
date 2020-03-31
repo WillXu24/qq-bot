@@ -65,7 +65,11 @@ func GroupFindMany(filter bson.M, option *options.FindOptions) ([]GroupMsg, erro
 	return res, nil
 }
 
-func GroupUpdateOne(filter bson.M, update bson.M) (*mongo.UpdateResult, error) {
+func GroupUpdateOne(filter , update bson.M) (*mongo.UpdateResult, error) {
 	res, err := GroupColl.UpdateOne(context.Background(), filter, update)
 	return res, err
+}
+func GroupUpdateMany(filter,update bson.M) (*mongo.UpdateResult, error) {
+	res, err := GroupColl.UpdateMany(context.Background(), filter, update)
+	return res,err
 }

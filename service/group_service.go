@@ -28,8 +28,8 @@ func MsgCounter(msg views.PostMsg) error {
 	// 检查日期
 	timeZero := utils.GetTimeZero()
 	if res.LastMsgAt < timeZero {
-		// 新的一天则相应更新，返回
-		_, err := models.GroupUpdateOne(filter, bson.M{
+		// 新的一天则全部更新，返回
+		_, err := models.GroupUpdateMany(bson.M{"group_id": msg.GroupId}, bson.M{
 			"$set": bson.M{
 				"last_msg_at":     msg.Time,
 				"today_msg_count": 1,
