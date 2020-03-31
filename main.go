@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	// 路由部分
+	// 消息路由
 	r := gin.Default()
 	r.POST("/qq", api.MsgHandler)
 	r.Run()

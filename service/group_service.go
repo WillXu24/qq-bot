@@ -51,7 +51,11 @@ func MsgCounter(msg views.PostMsg) error {
 	return err
 }
 
-// GetDragonToday 获取今日龙王：今日骚话排行榜：\n1.某某某:多少条\n2.某某某：多少条\n【某某某】快给大家喷个水！
+// 获取今日龙王：
+// 今日骚话排行榜：\n
+// 1.某某某:多少条\n
+// 2.某某某：多少条\n
+//【某某某】快给大家喷个水！
 func GetDragonToday(groupId int64) error {
 	// 查询数据
 	res, err := models.GroupFindMany(bson.M{"group_id": groupId}, &options.FindOptions{Sort: bson.M{"today_msg_count": -1}})
@@ -63,7 +67,28 @@ func GetDragonToday(groupId int64) error {
 	for i := range res {
 		msg = msg + fmt.Sprintf("%d.%s:%d条\n", i+1, res[i].Username, res[i].TodayMsgCount)
 	}
-	msg = "今日骚话排行榜：\n" + msg + fmt.Sprintf("【%s】快给大家喷个水！", res[0].Username)
+	msg = "今日骚话排行榜：\n" + msg + fmt.Sprintf("%s，快给大家喷个水！", res[0].Username)
+	// 发送回复
+	return Send2group(groupId, msg)
+}
+
+// 获取历史龙王
+// 历史骚话排行榜：\n
+// 1.某某某:多少条\n
+// 2.某某某：多少条\n
+// 某某某，永远滴龙王！
+func GetDragonHistory(groupId int64) error {
+	// 查询数据
+	res, err := models.GroupFindMany(bson.M{"group_id": groupId}, &options.FindOptions{Sort: bson.M{"today_msg_count": -1}})
+	if err != nil {
+		return err
+	}
+	// 生成回复
+	var msg string
+	for i := range res {
+		msg = msg + fmt.Sprintf("%d.%s:%d条\n", i+1, res[i].Username, res[i].TodayMsgCount)
+	}
+	msg = "历史骚话排行榜：\n" + msg + fmt.Sprintf("%s，永远滴龙王！", res[0].Username)
 	// 发送回复
 	return Send2group(groupId, msg)
 }

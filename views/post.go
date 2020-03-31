@@ -1,4 +1,5 @@
 package views
+
 // 发送人信息
 type Sender struct {
 	// 发送者 QQ 号

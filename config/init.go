@@ -5,8 +5,10 @@ import (
 	"log"
 	"os"
 )
+
 var DatabaseURL string
 var DatabaseName string
+
 func init() {
 	err := godotenv.Load("./config/config.env")
 	if err != nil {
