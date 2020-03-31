@@ -16,12 +16,6 @@ func MsgHandler(c *gin.Context) {
 		fmt.Println("ShouldBind:", err)
 	}
 
-	// 测试用
-	fmt.Println(msg.SubType)
-	fmt.Println(msg.Message)
-	fmt.Println(msg.RawMessage)
-	fmt.Println(msg.Sender)
-
 	// 群聊
 	if msg.MessageType == "group" {
 		// 基本功能：消息计数
@@ -32,7 +26,7 @@ func MsgHandler(c *gin.Context) {
 		// 附加功能：
 		res := funcSelector(msg.RawMessage)
 		if res == "今日龙王" {
-			err := service.Send2group(msg.GroupId, "我明白了,你想查看"+res+"对不对")
+			err := service.Send2group(msg.GroupId, "我给你看看什么叫"+res)
 			if err != nil {
 				fmt.Println("Send2group", err)
 			}
@@ -43,7 +37,7 @@ func MsgHandler(c *gin.Context) {
 			return
 		}
 		if res == "历史龙王" {
-			err := service.Send2group(msg.GroupId, "我明白了,你想查看"+res+"对不对")
+			err := service.Send2group(msg.GroupId, "我给你看看什么叫"+res)
 			if err != nil {
 				fmt.Println("Send2group", err)
 			}
@@ -67,6 +61,7 @@ func MsgHandler(c *gin.Context) {
 }
 
 func funcSelector(msg string) string {
+	msg=" "+msg
 	var funcMap = map[string]int{
 		"今日龙王": 0,
 		"历史龙王": 0,
