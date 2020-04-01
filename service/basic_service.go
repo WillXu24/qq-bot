@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"qq_bot/config"
 )
 
 func Send2person(id int64, msg string) error {
@@ -18,7 +19,7 @@ func Send2person(id int64, msg string) error {
 		return err
 	}
 	// 提交请求
-	request, err := http.NewRequest("POST", "http://cqhttp:5700/send_private_msg", bytes.NewReader(marshal))
+	request, err := http.NewRequest("POST", config.CoolQURL+"/send_private_msg", bytes.NewReader(marshal))
 	if err != nil {
 		return err
 	}
@@ -43,7 +44,7 @@ func Send2group(id int64, msg string) error {
 		return err
 	}
 	// 提交请求
-	request, err := http.NewRequest("POST", "http://cqhttp:5700/send_group_msg", bytes.NewReader(marshal))
+	request, err := http.NewRequest("POST", config.CoolQURL+"/send_group_msg", bytes.NewReader(marshal))
 	if err != nil {
 		return err
 	}

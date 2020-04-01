@@ -5,31 +5,21 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"time"
 )
 
 type GroupMsg struct {
-	GroupId  int64  `json:"group_id" bson:"group_id"`
-	UserId   int64  `json:"user_id" bson:"user_id"`
-	Username string `json:"username" bson:"username"`
-
-	LastMsgAt   int64 `json:"last_msg_at" bson:"last_msg_at"`
+	GroupId int64 `json:"group_id" bson:"group_id"`
+	GroupName string `json:"group_name"`
+	//LastModifiedAt int64 `json:"last_modified_at" json:"last_modified_at"`
 	LastReplyAt int64 `json:"last_reply_at" bson:"last_reply_at"`
-
-	TodayMsgCount uint `json:"today_msg_count" bson:"today_msg_count"`
-	TotalMsgCount uint `json:"total_msg_count" bson:"total_msg_count"`
 }
 
 func GroupInsertOne(msg GroupMsg) (*mongo.InsertOneResult, error) {
 	res, err := GroupColl.InsertOne(context.Background(), bson.M{
-		"group_id": msg.GroupId,
-		"user_id":  msg.UserId,
-		"username": msg.Username,
-
-		"last_msg_at":   msg.LastMsgAt,
-		"last_reply_at": msg.LastReplyAt,
-
-		"today_msg_count": 1,
-		"total_msg_count": 1,
+		"group_id":      msg.GroupId,
+		"group_name":msg.GroupName,
+		"last_reply_at": time.Now().Unix(),
 	})
 	return res, err
 }
@@ -65,11 +55,11 @@ func GroupFindMany(filter bson.M, option *options.FindOptions) ([]GroupMsg, erro
 	return res, nil
 }
 
-func GroupUpdateOne(filter , update bson.M) (*mongo.UpdateResult, error) {
+func GroupUpdateOne(filter, update bson.M) (*mongo.UpdateResult, error) {
 	res, err := GroupColl.UpdateOne(context.Background(), filter, update)
 	return res, err
 }
-func GroupUpdateMany(filter,update bson.M) (*mongo.UpdateResult, error) {
+func GroupUpdateMany(filter, update bson.M) (*mongo.UpdateResult, error) {
 	res, err := GroupColl.UpdateMany(context.Background(), filter, update)
-	return res,err
+	return res, err
 }

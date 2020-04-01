@@ -2,3 +2,4 @@
 /.idea/
 /config/config.env
 docker-compose.yml
+/test/

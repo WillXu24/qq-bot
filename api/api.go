@@ -1,8 +1,8 @@
 package api
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 	"qq_bot/service"
 	"qq_bot/views"
 	"strings"
@@ -13,55 +13,55 @@ func MsgHandler(c *gin.Context) {
 	var msg views.PostMsg
 	err := c.ShouldBind(&msg)
 	if err != nil {
-		fmt.Println("ShouldBind:", err)
+		log.Println("ShouldBind:", err)
+	}
+
+	// 测试用
+	log.Println("【消息类型】",msg.MessageType)
+	log.Println("【消息子类型】",msg.SubType)
+	log.Println("【消息内容】",msg.RawMessage)
+	log.Println("【发送人信息】",msg.Sender)
+
+	// 请求
+	if msg.MessageType=="request"{
+		service.GroupAndMemberInit()
 	}
 
 	// 群聊
-	if msg.MessageType == "group" {
-		// 基本功能：消息计数
-		err := service.MsgCounter(msg)
-		if err != nil {
-			fmt.Println("MsgCounter", err)
-		}
-		// 附加功能：
-		res := funcSelector(msg.RawMessage)
-		if res == "今日龙王" {
-			err := service.Send2group(msg.GroupId, "我给你看看什么叫"+res)
-			if err != nil {
-				fmt.Println("Send2group", err)
-			}
-			err = service.GetDragonToday(msg.GroupId)
-			if err != nil {
-				fmt.Println("GetDragonToday", err)
-			}
-			return
-		}
-		if res == "历史龙王" {
-			err := service.Send2group(msg.GroupId, "我给你看看什么叫"+res)
-			if err != nil {
-				fmt.Println("Send2group", err)
-			}
-			err = service.GetDragonHistory(msg.GroupId)
-			if err != nil {
-				fmt.Println("GetDragonHistory", err)
-			}
-			return
-		}
-		// 默认功能
+	// 跳过匿名消息，或者采用事件过滤器：https://cqhttp.cc/docs/4.14/#/EventFilter
+	if msg.MessageType == "group" && msg.SubType != "anonymous" {
+		group(msg)
 	}
 
 	// 私聊
 	if msg.MessageType == "private" {
-		// 基本功能：复读机
-		err := service.Send2person(msg.UserId, msg.RawMessage)
-		if err != nil {
-			fmt.Println("Send2person", err)
-		}
+		private(msg)
 	}
 }
 
+func private(msg views.PostMsg) {
+	// 基本功能：复读机
+	service.Send2person(msg.UserId, msg.RawMessage)
+}
+
+func group(msg views.PostMsg) {
+	// 基本功能：消息计数
+	service.Counter(msg.GroupId, msg.UserId)
+	// 附加功能：
+	res := funcSelector(msg.RawMessage)
+	if res == "今日龙王" {
+		service.CounterRankToday(msg.GroupId)
+		return
+	}
+	if res == "历史龙王" {
+		service.CounterRankHistory(msg.GroupId)
+		return
+	}
+	// 默认功能
+}
+
 func funcSelector(msg string) string {
-	msg=" "+msg
+	msg = " " + msg
 	var funcMap = map[string]int{
 		"今日龙王": 0,
 		"历史龙王": 0,
@@ -81,8 +81,10 @@ func funcSelector(msg string) string {
 	}
 
 	var res string
-	for i,v:=range funcMap{
-		if v>1{res=i}
+	for i, v := range funcMap {
+		if v > 1 {
+			res = i
+		}
 	}
 	return res
 }
