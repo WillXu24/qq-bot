@@ -9,10 +9,10 @@ import (
 )
 
 type MemberMsg struct {
-	GroupId  int64  `json:"group_id" bson:"group_id"`
+	GroupId   int64  `json:"group_id" bson:"group_id"`
 	GroupName string `json:"group_name"`
-	UserId   int64  `json:"user_id" bson:"user_id"`
-	Username string `json:"username" bson:"username"`
+	UserId    int64  `json:"user_id" bson:"user_id"`
+	Username  string `json:"username" bson:"username"`
 
 	LastMsgAt   int64 `json:"last_msg_at" bson:"last_msg_at"`
 	LastReplyAt int64 `json:"last_reply_at" bson:"last_reply_at"`
@@ -23,10 +23,10 @@ type MemberMsg struct {
 
 func MemberInsertOne(msg MemberMsg) (*mongo.InsertOneResult, error) {
 	res, err := MemberColl.InsertOne(context.Background(), bson.M{
-		"group_id": msg.GroupId,
-		"group_name":msg.GroupName,
-		"user_id":  msg.UserId,
-		"username": msg.Username,
+		"group_id":   msg.GroupId,
+		"group_name": msg.GroupName,
+		"user_id":    msg.UserId,
+		"username":   msg.Username,
 
 		"last_msg_at":   time.Now().Unix(),
 		"last_reply_at": time.Now().Unix(),

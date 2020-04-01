@@ -20,7 +20,7 @@ type groupRes struct {
 	Status  string     `json:"status"`
 }
 type groupMsg struct {
-	GroupID    int64  `json:"group_id"`
+	GroupID   int64  `json:"group_id"`
 	GroupName string `json:"group_name"`
 }
 
@@ -64,8 +64,8 @@ func GroupAndMemberInit() {
 		}
 		// 不存在则初始化
 		_, err = models.GroupInsertOne(models.GroupMsg{
-			GroupId: group[i].GroupID,
-			GroupName:group[i].GroupName,
+			GroupId:   group[i].GroupID,
+			GroupName: group[i].GroupName,
 		})
 		if err != nil {
 			log.Fatal("Service init failed:", err)
@@ -77,10 +77,10 @@ func GroupAndMemberInit() {
 			}
 			// 写入数据库
 			_, err := models.MemberInsertOne(models.MemberMsg{
-				GroupId:  member[j].GroupID,
-				GroupName:group[i].GroupName,
-				UserId:   member[j].UserID,
-				Username: member[j].Nickname,
+				GroupId:   member[j].GroupID,
+				GroupName: group[i].GroupName,
+				UserId:    member[j].UserID,
+				Username:  member[j].Nickname,
 			})
 			if err != nil {
 				log.Fatal("Service init failed:", err)

@@ -9,7 +9,7 @@ import (
 )
 
 type GroupMsg struct {
-	GroupId int64 `json:"group_id" bson:"group_id"`
+	GroupId   int64  `json:"group_id" bson:"group_id"`
 	GroupName string `json:"group_name"`
 	//LastModifiedAt int64 `json:"last_modified_at" json:"last_modified_at"`
 	LastReplyAt int64 `json:"last_reply_at" bson:"last_reply_at"`
@@ -18,7 +18,7 @@ type GroupMsg struct {
 func GroupInsertOne(msg GroupMsg) (*mongo.InsertOneResult, error) {
 	res, err := GroupColl.InsertOne(context.Background(), bson.M{
 		"group_id":      msg.GroupId,
-		"group_name":msg.GroupName,
+		"group_name":    msg.GroupName,
 		"last_reply_at": time.Now().Unix(),
 	})
 	return res, err

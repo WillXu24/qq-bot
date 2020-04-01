@@ -17,13 +17,13 @@ func MsgHandler(c *gin.Context) {
 	}
 
 	// 测试用
-	log.Println("【消息类型】",msg.MessageType)
-	log.Println("【消息子类型】",msg.SubType)
-	log.Println("【消息内容】",msg.RawMessage)
-	log.Println("【发送人信息】",msg.Sender)
+	log.Println("【消息类型】", msg.MessageType)
+	log.Println("【消息子类型】", msg.SubType)
+	log.Println("【消息内容】", msg.RawMessage)
+	log.Println("【发送人信息】", msg.Sender)
 
 	// 请求
-	if msg.MessageType=="request"{
+	if msg.MessageType == "request" {
 		service.GroupAndMemberInit()
 	}
 
