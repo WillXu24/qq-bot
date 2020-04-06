@@ -6,7 +6,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"qq_bot/models"
-	"time"
 )
 
 // 消息计数
@@ -29,18 +28,16 @@ func CounterClear() {
 	// 发送今日统计
 	group, err := models.GroupFindMany(nil, nil)
 	for i := range group {
-		// 调用发送函数
-		Send2group(group[i].GroupId, "哦豁，马上转点了，让我看看今天谁是龙王")
 		// 查询数据
 		res, _ := models.MemberFindMany(bson.M{"group_id": group[i].GroupId, "today_msg_count": bson.M{"$gt": 0}}, &options.FindOptions{Sort: bson.M{"today_msg_count": -1}})
-		time.Sleep(time.Second * 10)
+		// 每人发言则不推送
 		if res == nil {
-			Send2group(group[i].GroupId, "哦，原来没人说话阿，那没事了")
-			return
+			continue
 		}
 		// 生成回复
 		var msg string
-		msg = fmt.Sprintf("%s今天说了%d句骚话，快给兄弟们喷个水！", res[0].Username, res[0].TodayMsgCount)
+		msg = fmt.Sprintf(
+			"【每日龙王推送】\n%s今天说了%d句骚话，恭喜这个比！", res[0].Username, res[0].TodayMsgCount)
 		// 调用发送函数
 		Send2group(group[i].GroupId, msg)
 	}
