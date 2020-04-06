@@ -1,5 +1,14 @@
-# 过滤配置文件
+# IDEA 配置文件
 /.idea/
+
+# 配置文件
 /config/config.env
+
+# docker配置文件
 docker-compose.yml
+
+# 测试文件
 /test/
+
+# 日志文件
+/logs/*.log
