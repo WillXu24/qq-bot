@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/robfig/cron"
 	"log"
@@ -48,7 +47,7 @@ func slowStart() {
 	c := cron.New()
 
 	c.AddFunc("*/10 * * * * *", func() {
-		fmt.Println("启动准备中")
+		log.Println("启动准备中")
 	})
 
 	go c.Start()
