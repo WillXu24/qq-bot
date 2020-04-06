@@ -5,7 +5,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
+	"qq_bot/config"
 	"qq_bot/models"
+	"time"
 )
 
 // 消息计数
@@ -14,12 +16,16 @@ func Counter(groupID, userID int64) {
 	memberFilter := bson.M{"group_id": groupID, "user_id": userID}
 	// 更新，返回
 	_, err := models.MemberUpdateOne(memberFilter, bson.M{
+		"$set": bson.M{
+			"last_msg_at": time.Now().Unix()},
 		"$inc": bson.M{
 			"today_msg_count": 1,
 			"total_msg_count": 1,
 		}})
 	if err != nil {
 		log.Println("Counter:", err)
+		Send2person()
+		return
 	}
 }
 
