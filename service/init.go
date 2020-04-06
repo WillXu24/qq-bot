@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"qq_bot/config"
 	"qq_bot/models"
-	"strconv"
 )
 
 // get_group_list
@@ -42,10 +41,6 @@ func init() {
 }
 
 func GroupAndMemberInit() {
-	// 初始化机器人qq，用于跳过
-	var qq int64
-	qq, err := strconv.ParseInt(config.QQ, 10, 64)
-
 	// 获取群组列表
 	group, err := getGroup()
 	if err != nil {
@@ -72,7 +67,7 @@ func GroupAndMemberInit() {
 		}
 		for j := range member {
 			// 跳过机器人qq
-			if member[j].UserID == qq {
+			if member[j].UserID == config.BotQQ {
 				continue
 			}
 			// 写入数据库
