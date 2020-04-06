@@ -17,8 +17,8 @@ var CoolQURL string
 var BotQQ int64
 var AdminQQ int64
 
-
 func init() {
+	// 读取配置文件
 	err := godotenv.Load("./config/config.env")
 	if err != nil {
 		log.Fatal("Config init failed(1):", err)
@@ -33,15 +33,15 @@ func init() {
 
 	// 初始化整形参数
 	botQQ, err := strconv.ParseInt(os.Getenv("BOT_QQ"), 10, 64)
-	if err!=nil{
+	if err != nil {
 		log.Fatal("Config init failed(2):", err)
 	}
 	adminQQ, err := strconv.ParseInt(os.Getenv("BOT_QQ"), 10, 64)
-	if err!=nil{
+	if err != nil {
 		log.Fatal("Config init failed(3):", err)
 	}
-	BotQQ=botQQ
-	AdminQQ =adminQQ
+	BotQQ = botQQ
+	AdminQQ = adminQQ
 }
 
 func slowStart() {

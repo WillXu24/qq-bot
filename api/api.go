@@ -16,16 +16,11 @@ func MsgHandler(c *gin.Context) {
 		log.Println("ShouldBind:", err)
 	}
 
-	// 测试用
-	log.Println("【消息类型】", msg.MessageType)
-	log.Println("【消息子类型】", msg.SubType)
-	log.Println("【消息内容】", msg.RawMessage)
-	log.Println("【发送人信息】", msg.Sender)
-
-	// 请求
-	if msg.MessageType == "request" {
-		service.GroupAndMemberInit()
-	}
+	// 后台信息
+	//log.Println("【消息类型】", msg.MessageType)
+	//log.Println("【消息子类型】", msg.SubType)
+	//log.Println("【消息内容】", msg.RawMessage)
+	//log.Println("【发送人信息】", msg.Sender)
 
 	// 群聊
 	// 跳过匿名消息，或者采用事件过滤器：https://cqhttp.cc/docs/4.14/#/EventFilter
@@ -57,8 +52,8 @@ func group(msg views.PostMsg) {
 		service.CounterRankHistory(msg.GroupId)
 		return
 	}
-	if res == "小程序"{
-		service.MiniApp2URL(msg.GroupId,msg.RawMessage)
+	if res == "小程序" {
+		service.MiniApp2URL(msg.GroupId, msg.RawMessage)
 	}
 	// 默认功能
 }
@@ -68,7 +63,7 @@ func funcSelector(msg string) string {
 	var funcMap = map[string]int{
 		"今日龙王": 0,
 		"历史龙王": 0,
-		"小程序":0,
+		"小程序":  0,
 	}
 	if index := strings.Index(msg, "龙王"); index > 0 {
 		funcMap["今日龙王"]++
@@ -83,10 +78,10 @@ func funcSelector(msg string) string {
 	if index := strings.Index(msg, "老"); index > 0 {
 		funcMap["历史龙王"]++
 	}
-	if index := strings.Index(msg, "[CQ:rich,title=&#91");index>0{
+	if index := strings.Index(msg, "[CQ:rich,title=&#91"); index > 0 {
 		funcMap["小程序"]++
 	}
-	if index := strings.Index(msg, "QQ小程序&#93");index>0{
+	if index := strings.Index(msg, "QQ小程序&#93"); index > 0 {
 		funcMap["小程序"]++
 	}
 

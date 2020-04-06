@@ -5,7 +5,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
-	"qq_bot/config"
 	"qq_bot/models"
 	"time"
 )
@@ -24,7 +23,6 @@ func Counter(groupID, userID int64) {
 		}})
 	if err != nil {
 		log.Println("Counter:", err)
-		Send2person()
 		return
 	}
 }
