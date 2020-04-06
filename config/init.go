@@ -20,7 +20,7 @@ func init() {
 		log.Fatal("Config init failed:", err)
 	}
 	// 慢启动处理
-	//slowStart()
+	slowStart()
 
 	// 初始化参数
 	DatabaseURL = os.Getenv("DB_URI")

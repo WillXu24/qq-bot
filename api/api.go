@@ -57,6 +57,9 @@ func group(msg views.PostMsg) {
 		service.CounterRankHistory(msg.GroupId)
 		return
 	}
+	if res == "小程序"{
+		service.MiniApp2URL(msg.GroupId,msg.RawMessage)
+	}
 	// 默认功能
 }
 
@@ -65,6 +68,7 @@ func funcSelector(msg string) string {
 	var funcMap = map[string]int{
 		"今日龙王": 0,
 		"历史龙王": 0,
+		"小程序":0,
 	}
 	if index := strings.Index(msg, "龙王"); index > 0 {
 		funcMap["今日龙王"]++
@@ -78,6 +82,12 @@ func funcSelector(msg string) string {
 	}
 	if index := strings.Index(msg, "老"); index > 0 {
 		funcMap["历史龙王"]++
+	}
+	if index := strings.Index(msg, "[CQ:rich,title=&#91");index>0{
+		funcMap["小程序"]++
+	}
+	if index := strings.Index(msg, "QQ小程序&#93");index>0{
+		funcMap["小程序"]++
 	}
 
 	var res string

@@ -1,3 +1,6 @@
+# 配置文件示例
+# 按照自己的配置编写
+
 version: '3'
 
 services:
@@ -11,7 +14,7 @@ services:
       - "9000:9000"
       # - "5700:5700"
     environment:
-      - COOLQ_ACCOUNT=3424989164        # 酷Q账号（QQ账号）
+      - COOLQ_ACCOUNT=1234567890        # 酷Q账号（QQ账号）
       - VNC_PASSWD=123456               # nvc 密码
       - FORCE_ENV=true                  # 强制覆盖原有配置，否则配置不会更新。。
       #- CQHTTP_USE_HTTP=no             # 关闭 http api
