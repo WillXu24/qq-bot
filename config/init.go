@@ -1,8 +1,10 @@
 package config
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/robfig/cron"
+	"io"
 	"log"
 	"os"
 	"strconv"
@@ -17,11 +19,15 @@ var BotQQ int64
 var AdminQQ int64
 
 func init() {
+	// 初始化日志文件
+	logInit()
+
 	// 读取配置文件
 	err := godotenv.Load("./config/config.env")
 	if err != nil {
 		log.Fatal("Config init failed(1):", err)
 	}
+
 	// 慢启动处理
 	slowStart()
 
@@ -41,6 +47,24 @@ func init() {
 	}
 	BotQQ = botQQ
 	AdminQQ = adminQQ
+}
+
+func logInit() {
+	// 日志初始化
+	file := "./logs/access.log"
+	logFile, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
+	if err != nil {
+		panic(err)
+	}
+	log.SetOutput(logFile)
+	log.SetPrefix("[log] ")
+	//log.SetFlags(log.LstdFlags | log.Lshortfile | log.LUTC)
+	log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
+
+	// 路由访问日志
+	//gin.DisableConsoleColor()
+	//file, _ := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
+	gin.DefaultWriter = io.MultiWriter(logFile, os.Stdout)
 }
 
 func slowStart() {
