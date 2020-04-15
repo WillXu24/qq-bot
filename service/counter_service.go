@@ -34,8 +34,8 @@ func CounterClear() {
 	for i := range group {
 		// 查询数据
 		res, _ := models.MemberFindMany(bson.M{"group_id": group[i].GroupId, "today_msg_count": bson.M{"$gt": 0}}, &options.FindOptions{Sort: bson.M{"today_msg_count": -1}})
-		// 每人发言则不推送
-		if res == nil {
+		// 没人发言或者发言少则不推送
+		if res == nil || res[0].TodayMsgCount < 50 {
 			continue
 		}
 		// 生成回复
